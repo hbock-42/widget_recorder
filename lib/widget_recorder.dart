@@ -145,7 +145,7 @@ class WidgetRecorderController {
   ///
   /// Listeners can be added with [addListener].
   void removeListener(VoidCallback listener) {
-    final bool removed = _listeners.remove(listener);
+    _listeners.remove(listener);
   }
 
   /// Calls all the listeners.
