@@ -1,0 +1,19 @@
+name: widget_recorder
+description: A widget to help you record an animation
+version: 0.0.1
+author:
+homepage: https://github.com/hbock-42/widget_recorder
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  image: ^2.1.13
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
