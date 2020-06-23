@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widget_recorder/widget_recorder.dart';
 
 void main() {
   runApp(MyApp());
@@ -41,6 +42,7 @@ class _AnimatedCircleState extends State<AnimatedCircle>
     with SingleTickerProviderStateMixin {
   static const double CircleInitialDiameter = 200;
   AnimationController _controller;
+  WidgetRecorderController widgetRecorderController;
 
   @override
   void initState() {
@@ -58,27 +60,35 @@ class _AnimatedCircleState extends State<AnimatedCircle>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
+    return Column(
       children: <Widget>[
-        SizedBox(
-          height: CircleInitialDiameter,
-          width: CircleInitialDiameter,
-        ),
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return SizedBox(
-              height: CircleInitialDiameter * (1 - _controller.value),
-              width: CircleInitialDiameter * (1 - _controller.value),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(CircleInitialDiameter),
-                  color: Colors.red,
-                ),
+        WidgetRecorder(
+          controller: widgetRecorderController,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: CircleInitialDiameter,
+                width: CircleInitialDiameter,
               ),
-            );
-          },
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return SizedBox(
+                    height: CircleInitialDiameter * (1 - _controller.value),
+                    width: CircleInitialDiameter * (1 - _controller.value),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(CircleInitialDiameter),
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ],
     );
