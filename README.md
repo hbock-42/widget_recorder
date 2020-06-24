@@ -2,7 +2,19 @@
 
 A widget that help you record animation
 
-This is very limited for the moment, the recorded animation is of the APNG format (works pretty much like GIF)
+Warning: the api may change as this is a very very early version
+
+Current known limitations:
+
+- output format is only apng
+- the size of the recorded widget must not change
+
+todo list:
+
+- increase performances with isolates
+- improve documentations
+- improve example
+- add output format (mp4, gif, etc)
 
 # ⚙️ Installation
 
