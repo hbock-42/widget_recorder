@@ -48,6 +48,7 @@ class _AnimatedCircleState extends State<AnimatedCircle>
   bool _recording = false;
   img.Animation _animation;
   int _colorIndex = 0;
+  GlobalKey _playerKey;
 
   @override
   void initState() {
@@ -113,7 +114,8 @@ class _AnimatedCircleState extends State<AnimatedCircle>
                 )
               ],
             ),
-            if (_animation != null) AnimationPlayer(animation: _animation),
+            if (_animation != null)
+              AnimationPlayer(key: _playerKey, animation: _animation),
           ],
         ),
         if (_recording)
@@ -136,7 +138,7 @@ class _AnimatedCircleState extends State<AnimatedCircle>
 
   void switchColor() => setState(() => _colorIndex++);
 
-  void startRecord() {
+  void startRecord() async {
     setState(() {
       _recording = true;
     });
@@ -147,18 +149,20 @@ class _AnimatedCircleState extends State<AnimatedCircle>
 
     // This callback is called when the widget need a new frame
     _widgetRecorderController.addListener(notifyNewFrameReady);
-    _widgetRecorderController
-        .captureAnimation()
-        .then((animation) => onRecordEnded(animation));
+    var animation = await _widgetRecorderController.captureAnimation();
+    onRecordEnded(animation);
+    // .then((animation) => onRecordEnded(animation));
   }
 
   // When recording is finished, an animation is available
   void onRecordEnded(img.Animation animation) {
     setState(() {
       _recording = false;
+      _controller.repeat();
+      _widgetRecorderController.removeListener(notifyNewFrameReady);
+      _animation = animation;
+      _playerKey = GlobalKey();
     });
-    _widgetRecorderController.removeListener(notifyNewFrameReady);
-    _animation = animation;
   }
 
   // Notify the widgetRecorderController that a new frame is ready
