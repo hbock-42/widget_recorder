@@ -75,6 +75,10 @@ class WidgetRecorderController {
     }
   }
 
+  /// Reset the [childAnimationControler], play it frame by frame
+  /// and record each new frame and add it to an animation
+  ///
+  /// Returns the recorded animation
   Future<img.Animation> captureAnimation({
     double pixelRatio: 1,
   }) async {
