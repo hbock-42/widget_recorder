@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  widget_recorder:
+  widget_record:
     path: ../
 
 dev_dependencies:

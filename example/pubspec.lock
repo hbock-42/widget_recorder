@@ -170,7 +170,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.8"
-  widget_recorder:
+  widget_record:
     dependency: "direct main"
     description:
       path: ".."

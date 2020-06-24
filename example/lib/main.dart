@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:widget_recorder/widget_recorder.dart';
+import 'package:widget_record/widget_record.dart';
 import 'package:image/image.dart' as img;
 
 void main() {

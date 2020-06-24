@@ -1,4 +1,4 @@
-# widget_recorder
+# widget_record
 
 A widget that help you record animation
 
@@ -12,7 +12,7 @@ https://pub.dev/packages/widget_record/versions/0.0.1
 <p>Add this to your package's pubspec.yaml file:</p>
 <pre><code class="language-yaml">
 dependencies:
-  <strong>widget_recorder: ^0.0.1</strong>
+  <strong>widget_record: ^0.0.1</strong>
 
 </code></pre>
 
@@ -30,5 +30,5 @@ $ <strong>flutter pub get</strong>
   <p>Now in your Dart code, you can use:
   </p>
   <pre><code class="language-dart">
-import 'package:widget_recorder/widget_recorder.dart';
+import 'package:widget_record/widget_record.dart';
   </code></pre>
