@@ -18,7 +18,7 @@ todo list:
 
 # ⚙️ Installation
 
-https://pub.dev/packages/widget_record/versions/0.0.1
+https://pub.dev/packages/widget_record/versions/0.0.2
 
 <h3>1. Depend on it</h3>
 <p>Add this to your package's pubspec.yaml file:</p>
