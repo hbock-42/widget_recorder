@@ -24,7 +24,7 @@ https://pub.dev/packages/widget_record/versions/0.0.2
 <p>Add this to your package's pubspec.yaml file:</p>
 <pre><code class="language-yaml">
 dependencies:
-  <strong>widget_record: ^0.0.1</strong>
+  <strong>widget_record: ^0.0.2</strong>
 
 </code></pre>
 
