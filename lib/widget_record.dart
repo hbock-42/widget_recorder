@@ -11,18 +11,18 @@ import 'package:image/image.dart' as img;
 
 class WidgetRecorder extends StatefulWidget {
   final Widget child;
-  final WidgetRecorderController controller;
+  final WidgetRecorderController? controller;
   WidgetRecorder({
-    Key key,
-    this.child,
-    @required this.controller,
+    Key? key,
+    required this.child,
+    this.controller,
   }) : super(key: key);
   @override
   _WidgetRecorderState createState() => _WidgetRecorderState();
 }
 
 class _WidgetRecorderState extends State<WidgetRecorder> {
-  WidgetRecorderController _controller;
+  WidgetRecorderController? _controller;
 
   @override
   void initState() {
@@ -46,31 +46,32 @@ class _WidgetRecorderState extends State<WidgetRecorder> {
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
-      key: _controller._containerKey,
+      key: _controller!._containerKey,
       child: widget.child,
     );
   }
 }
 
 class WidgetRecorderController {
-  GlobalKey _containerKey;
-  RecorderInfo _recorderInfo;
-  List<img.Image> _frameImages;
-  final AnimationController childAnimationControler;
+  GlobalKey? _containerKey;
+  RecorderInfo? _recorderInfo;
+  List<img.Image>? _frameImages;
+  final AnimationController? childAnimationControler;
   final Fps fps;
-  Completer _newFrameAvailable;
+  Completer? _newFrameAvailable;
 
-  int get _recordedFrameCount => _frameImages == null ? 0 : _frameImages.length;
+  int get _recordedFrameCount =>
+      _frameImages == null ? 0 : _frameImages!.length;
 
   WidgetRecorderController({
-    @required this.childAnimationControler,
+    required this.childAnimationControler,
     this.fps = Fps.Fps25,
   }) {
     _containerKey = GlobalKey();
     if (childAnimationControler != null) {
       _recorderInfo = RecorderInfo(
         Fps.Fps50,
-        childAnimationControler.duration.inMilliseconds,
+        childAnimationControler!.duration!.inMilliseconds,
       );
     }
   }
@@ -82,13 +83,13 @@ class WidgetRecorderController {
   Future<img.Animation> captureAnimation({
     double pixelRatio: 1,
   }) async {
-    _frameImages = List<img.Image>();
-    while (_recordedFrameCount < _recorderInfo.totalFrameNeeded) {
-      childAnimationControler.value =
-          _recordedFrameCount / _recorderInfo.totalFrameNeeded;
+    _frameImages = <img.Image>[];
+    while (_recordedFrameCount < _recorderInfo!.totalFrameNeeded!) {
+      childAnimationControler!.value =
+          _recordedFrameCount / _recorderInfo!.totalFrameNeeded!;
       requestFrame();
       _newFrameAvailable = Completer();
-      await _newFrameAvailable.future;
+      await _newFrameAvailable!.future;
       ui.Image image = await _captureAsUiImage(pixelRatio: pixelRatio);
       await _addUiImageToAnimation(image);
     }
@@ -97,19 +98,19 @@ class WidgetRecorderController {
 
   Future _addUiImageToAnimation(ui.Image image) async {
     var frameDuration = Duration(
-      milliseconds: _recorderInfo.frameDurationsInMs[_recordedFrameCount],
+      milliseconds: _recorderInfo!.frameDurationsInMs![_recordedFrameCount],
     );
-    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    List<int> pngBytes = byteData.buffer.asUint8List();
-    img.Image decodedImage = img.decodeImage(pngBytes)
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    List<int> pngBytes = byteData!.buffer.asUint8List();
+    img.Image decodedImage = img.decodeImage(pngBytes)!
       ..duration = frameDuration.inMilliseconds;
     decodedImage.blendMethod = img.BlendMode.over;
-    _frameImages.add(decodedImage);
+    _frameImages!.add(decodedImage);
   }
 
   img.Animation _createAnimation() {
     var animation = img.Animation();
-    _frameImages.forEach((frame) => animation.addFrame(frame));
+    _frameImages!.forEach((frame) => animation.addFrame(frame));
     return animation;
   }
 
@@ -119,9 +120,11 @@ class WidgetRecorderController {
     //Delay is required. See Issue https://github.com/flutter/flutter/issues/22308
     return new Future.delayed(delay, () async {
       try {
-        RenderRepaintBoundary boundary =
-            this._containerKey.currentContext.findRenderObject();
-        return await boundary.toImage(pixelRatio: pixelRatio);
+        RenderRepaintBoundary? boundary = this
+            ._containerKey!
+            .currentContext!
+            .findRenderObject() as RenderRepaintBoundary?;
+        return await boundary!.toImage(pixelRatio: pixelRatio);
       } catch (Exception) {
         throw (Exception);
       }
@@ -133,7 +136,7 @@ class WidgetRecorderController {
   }
 
   void newFrameReady() {
-    _newFrameAvailable.complete();
+    _newFrameAvailable!.complete();
   }
 
   final ObserverList<VoidCallback> _listeners = ObserverList<VoidCallback>();
@@ -160,7 +163,7 @@ class WidgetRecorderController {
     final List<VoidCallback> localListeners =
         List<VoidCallback>.from(_listeners);
     for (final VoidCallback listener in localListeners) {
-      InformationCollector collector;
+      InformationCollector? collector;
       try {
         if (_listeners.contains(listener)) listener();
       } catch (exception, stack) {
@@ -193,8 +196,8 @@ class Fps {
 
 class RecorderInfo {
   final Fps fps;
-  int totalFrameNeeded;
-  List<int> frameDurationsInMs;
+  int? totalFrameNeeded;
+  List<int>? frameDurationsInMs;
 
   RecorderInfo(this.fps, int durationInMs) {
     double dottedFrameCount =
@@ -203,12 +206,12 @@ class RecorderInfo {
     if (dottedFrameCount.round().roundToDouble() == dottedFrameCount) {
       totalFrameNeeded = dottedFrameCount.round();
       frameDurationsInMs =
-          List<int>.filled(totalFrameNeeded, frameDurationInMs);
+          List<int>.filled(totalFrameNeeded!, frameDurationInMs);
     } else {
       totalFrameNeeded = dottedFrameCount.floor() + 1;
       frameDurationsInMs =
-          List<int>.filled(totalFrameNeeded, frameDurationInMs);
-      frameDurationsInMs.last =
+          List<int>.filled(totalFrameNeeded!, frameDurationInMs);
+      frameDurationsInMs!.last =
           durationInMs - (dottedFrameCount.floor() * frameDurationInMs);
     }
   }
