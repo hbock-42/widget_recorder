@@ -1,15 +1,15 @@
 name: widget_record
 description: This package is made to help you record animations of you flutter application
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/hbock-42/widget_recorder
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  image: ^2.1.13
+  image: ^3.0.2
 
 dev_dependencies:
   flutter_test:

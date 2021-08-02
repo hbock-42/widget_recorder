@@ -23,12 +23,17 @@ class MyApp extends StatelessWidget {
 class WidgetRecorderExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 20),
-      child: Column(
-        children: <Widget>[
-          AnimatedCircle(),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Demo'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 20),
+        child: Column(
+          children: <Widget>[
+            AnimatedCircle(),
+          ],
+        ),
       ),
     );
   }
@@ -42,7 +47,13 @@ class AnimatedCircle extends StatefulWidget {
 class _AnimatedCircleState extends State<AnimatedCircle>
     with SingleTickerProviderStateMixin {
   static const double CircleInitialDiameter = 200;
-  final _colors = [Colors.red, Colors.blue, Colors.green];
+  final _colors = [
+    Colors.red,
+    Colors.blue,
+    Colors.green,
+    Colors.yellow,
+    Colors.amber
+  ];
   AnimationController _controller;
   WidgetRecorderController _widgetRecorderController;
   bool _recording = false;
@@ -99,39 +110,40 @@ class _AnimatedCircleState extends State<AnimatedCircle>
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                FlatButton(
-                  color: Colors.white,
-                  onPressed: () => startRecord(),
-                  child: Text('Record'),
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed: () => startRecord(),
+                      child: Text('Record'),
+                    ),
+                    SizedBox(width: 5),
+                    ElevatedButton(
+                      onPressed: () => switchColor(),
+                      child: Text('Switch color'),
+                    )
+                  ],
                 ),
-                FlatButton(
-                  color: Colors.white,
-                  onPressed: () => switchColor(),
-                  child: Text('Switch color'),
-                )
+                if (_recording)
+                  Container(
+                    color: Colors.red.withOpacity(0.1),
+                    child: Center(
+                      child: Text(
+                        "Recording",
+                        style: TextStyle(
+                            color: Colors.blue,
+                            decoration: TextDecoration.none),
+                      ),
+                    ),
+                  ),
               ],
             ),
             if (_animation != null)
               AnimationPlayer(key: _playerKey, animation: _animation),
           ],
         ),
-        if (_recording)
-          Container(
-            height: MediaQuery.of(context).size.height -
-                (MediaQuery.of(context).padding.top + 20),
-            width: MediaQuery.of(context).size.width,
-            color: Colors.red.withOpacity(0.1),
-            child: Center(
-              child: Text(
-                "Recording",
-                style: TextStyle(
-                    color: Colors.blue, decoration: TextDecoration.none),
-              ),
-            ),
-          ),
       ],
     );
   }
@@ -139,9 +151,8 @@ class _AnimatedCircleState extends State<AnimatedCircle>
   void switchColor() => setState(() => _colorIndex++);
 
   void startRecord() async {
-    setState(() {
-      _recording = true;
-    });
+    setState(() => _recording = true);
+
     _widgetRecorderController = WidgetRecorderController(
       childAnimationControler: _controller,
       fps: Fps.Fps10,
