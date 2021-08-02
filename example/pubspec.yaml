@@ -1,6 +1,6 @@
 name: example
 description: An example of how to use widget_record package.
-
+publish_to: none
 version: 1.0.0+1
 
 environment:
